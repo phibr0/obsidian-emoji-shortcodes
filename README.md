@@ -4,8 +4,8 @@ This Plugin adds Support for Emoji Shortcodes in Obsidian. You can find Emoji Sh
 
 **Example**
 
-- `joy` will become 😂
-- `heart` will become :heart:
+- `:joy:` will become 😂
+- `:heart:` will become :heart:
 
 ## How to install
 
