@@ -2,6 +2,11 @@
 
 This Plugin adds Support for Emoji Shortcodes in Obsidian. You can find Emoji Shortcodes [here](https://emojipedia.org/). This Plugin uses the Emojipedia Style for Shortcodes.
 
+**Example**
+
+- `joy` will become 😂
+- `heart` will become :heart:
+
 ## How to install
 
 1. Go to **Community Plugins** in your [Obsidian](https://www.obsidian.md) Settings and **disable** Safe Mode
