@@ -1,21 +1,26 @@
-import { MarkdownPostProcessor, Plugin } from 'obsidian';
-import { emoji } from "./emojis"
+import { Plugin } from 'obsidian';
+import immediateReplace from './immediateReplace';
+import EmojiMarkdownPostProcessor from './markdownPostProcessor';
+import { DEFAULT_SETTINGS, EmojiPluginSettings, EmojiPluginSettingTab } from './settings';
 
 export default class EmojiShortcodesPlugin extends Plugin {
-	emojiProcessor: MarkdownPostProcessor = (el: HTMLElement) => {
-		el.innerText.match(/:[^ \n]*:/g)?.forEach((e: keyof typeof emoji) => this.emojiReplace(e, el));
+
+	settings: EmojiPluginSettings;
+
+	async onload() {
+		await this.loadSettings();
+
+		this.registerMarkdownPostProcessor(EmojiMarkdownPostProcessor.emojiProcessor);
+		this.registerCodeMirror((cm) => immediateReplace(cm, this.settings));
+
+		this.addSettingTab(new EmojiPluginSettingTab(this.app, this));
 	}
 
-	emojiReplace(shortcode: keyof typeof emoji, el: HTMLElement | ChildNode){
-		if (el.hasChildNodes()){
-			el.childNodes.forEach((child: ChildNode) => this.emojiReplace(shortcode, child));
-		} else {
-			el.textContent = el.textContent.replace(shortcode, emoji[shortcode] ?? shortcode);
-		}
+	async loadSettings() {
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
 
-	onload() {
-		this.registerMarkdownPostProcessor(this.emojiProcessor);
+	async saveSettings() {
+		await this.saveData(this.settings);
 	}
 }
-
