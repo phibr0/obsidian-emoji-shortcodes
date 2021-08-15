@@ -4,7 +4,7 @@ import { emoji } from "./emojiList";
 export default class EmojiMarkdownPostProcessor {
 
     static emojiProcessor: MarkdownPostProcessor = (el: HTMLElement) => {
-		el.innerText.match(/:[^ \n]*:/g)?.forEach((e: keyof typeof emoji) => EmojiMarkdownPostProcessor.emojiReplace(e, el)); 
+		el.innerText.match(/[:][^\s:][^ \n:]*[:]/g)?.forEach((e: keyof typeof emoji) => EmojiMarkdownPostProcessor.emojiReplace(e, el)); 
 	}
 
 	static emojiReplace(shortcode: keyof typeof emoji, el: HTMLElement | ChildNode){
