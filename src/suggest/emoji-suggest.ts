@@ -27,7 +27,7 @@ export default class EmojiSuggest extends CodeMirrorSuggest<string> {
 
   renderSuggestion(suggestion: keyof typeof emoji, el: HTMLElement): void {
     const outer = el.createDiv({cls: "ES-suggester-container"});
-    outer.createDiv({cls: "ES-shortcode"}).setText(suggestion.replace(/:/g, ""));
+    outer.createDiv({cls: "ES-shortcode"}).setText(this.cap(suggestion.replace(/:/g, "").replace(/_/g, " ")));
     outer.createDiv({cls: "ES-emoji"}).setText(emoji[suggestion]);
   }
 
@@ -41,5 +41,13 @@ export default class EmojiSuggest extends CodeMirrorSuggest<string> {
     this.cmEditor.replaceRange(this.plugin.settings.immediateReplace ? emoji[suggestion] : suggestion, { ch: start, line: line }, cursorPos);
 
     this.close();
+  }
+
+  private cap(string: string): string {
+    const words = string.split(" ");
+  
+    return words.map((word) => {
+        return word[0].toUpperCase() + word.substring(1);
+    }).join(" ");
   }
 }
