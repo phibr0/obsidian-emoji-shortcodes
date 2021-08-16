@@ -1,6 +1,8 @@
 # Obsidian Emoji Shortcodes [![GitHub tag (Latest by date)](https://img.shields.io/github/v/tag/phibr0/obsidian-emoji-shortcodes)](https://github.com/phibr0/obsidian-emoji-shortcodes/releases) ![GitHub all releases](https://img.shields.io/github/downloads/phibr0/obsidian-emoji-shortcodes/total)
 
-This Plugin adds Support for Emoji Shortcodes in Obsidian. You can find Emoji Shortcodes [here](https://emojipedia.org/). This Plugin uses the Emojipedia Style for Shortcodes.
+<img align="right" width="550" src="https://user-images.githubusercontent.com/59741989/129605183-1295bfbb-760d-4b45-bf94-452f38f2b54c.gif">
+
+This Plugin adds Support for Emoji Shortcodes in Obsidian. You can find Emoji Shortcodes [here](https://emojipedia.org/).
 
 **Example**
 
