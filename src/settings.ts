@@ -39,7 +39,7 @@ export class EmojiPluginSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Emoji Suggester')
-			.setDesc('If this is turned on, a Suggester will appear everytime you type : followed by a letter. This will help you insert Emojis.')
+			.setDesc('If this is turned on, a Suggester will appear everytime you type : followed by a letter. This will help you insert Emojis. (Doesn\'t work on mobile)')
 			.addToggle(cb => {
 				cb.setValue(this.plugin.settings.suggester)
 					.onChange(async value => {

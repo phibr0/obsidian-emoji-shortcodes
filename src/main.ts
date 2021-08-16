@@ -1,4 +1,4 @@
-import { Plugin } from 'obsidian';
+import { Platform, Plugin } from 'obsidian';
 import immediateReplace from './immediateReplace';
 import EmojiMarkdownPostProcessor from './markdownPostProcessor';
 import { DEFAULT_SETTINGS, EmojiPluginSettings, EmojiPluginSettingTab } from './settings';
@@ -13,7 +13,7 @@ export default class EmojiShortcodesPlugin extends Plugin {
 		cmEditor: CodeMirror.Editor,
 		changeObj: CodeMirror.EditorChange
 	  ): boolean => {
-		if(this.settings.suggester) {
+		if(Platform.isDesktop && this.settings.suggester) {
 			return this.autosuggest?.update(cmEditor, changeObj);
 		} else return false;
 	  };
