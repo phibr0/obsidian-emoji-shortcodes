@@ -68,7 +68,7 @@ export default class Suggest<T> {
     const suggestionEls: HTMLDivElement[] = [];
 
     values.forEach((value) => {
-      const suggestionEl = this.containerEl.createDiv("suggestion-item");
+      const suggestionEl = this.containerEl.createDiv("suggestion-item ES-suggestion-item");
       this.owner.renderSuggestion(value, suggestionEl);
       suggestionEls.push(suggestionEl);
     });

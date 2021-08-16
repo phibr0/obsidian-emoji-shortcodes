@@ -53,7 +53,7 @@ export default abstract class CodeMirrorSuggest<T> implements ISuggestOwner<T> {
     this.scope = new Scope();
 
     this.suggestEl = createDiv("suggestion-container");
-    const suggestion = this.suggestEl.createDiv("suggestion");
+    const suggestion = this.suggestEl.createDiv({cls: "suggestion"});
     this.suggest = new Suggest(this, suggestion, this.scope);
 
     this.scope.register([], "Escape", this.close.bind(this));

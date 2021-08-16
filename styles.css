@@ -10,3 +10,11 @@ a[href="https://www.buymeacoffee.com/phibr0"]{
     display: flex;
     place-content: space-between;
 }
+
+.ES-shortcode {
+    margin-right: 8px;
+}
+
+.ES-suggestion-item {
+    padding-left: 10px;
+}
