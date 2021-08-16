@@ -3,10 +3,12 @@ import EmojiShortcodesPlugin from "./main";
 
 export interface EmojiPluginSettings {
 	immediateReplace: boolean;
+	suggester: boolean;
 }
 
 export const DEFAULT_SETTINGS: EmojiPluginSettings = {
 	immediateReplace: true,
+	suggester: true,
 }
 
 export class EmojiPluginSettingTab extends PluginSettingTab {
@@ -31,6 +33,17 @@ export class EmojiPluginSettingTab extends PluginSettingTab {
 				cb.setValue(this.plugin.settings.immediateReplace)
 					.onChange(async value => {
 						this.plugin.settings.immediateReplace = value;
+						await this.plugin.saveSettings();
+					})
+			});
+
+		new Setting(containerEl)
+			.setName('Emoji Suggester')
+			.setDesc('If this is turned on, a Suggester will appear everytime you type : followed by a letter. This will help you insert Emojis.')
+			.addToggle(cb => {
+				cb.setValue(this.plugin.settings.suggester)
+					.onChange(async value => {
+						this.plugin.settings.suggester = value;
 						await this.plugin.saveSettings();
 					})
 			});
