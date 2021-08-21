@@ -25,8 +25,12 @@ export default class EmojiShortcodesPlugin extends Plugin {
 		this.autosuggest = new EmojiSuggest(this.app, this);
 
 		this.registerMarkdownPostProcessor(EmojiMarkdownPostProcessor.emojiProcessor);
-		this.registerCodeMirror(cm => immediateReplace(cm, this.settings));
+		this.registerCodeMirror((cm: CodeMirror.Editor) => immediateReplace(cm, this.settings));
 		this.registerCodeMirror((cm: CodeMirror.Editor) => cm.on("change", this.autosuggestHandler));
+	}
+
+	onunload() {
+		this.app.workspace.iterateCodeMirrors((cm: CodeMirror.Editor) => cm.off("change", this.autosuggestHandler));
 	}
 
 	async loadSettings() {
