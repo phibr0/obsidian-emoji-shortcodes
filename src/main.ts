@@ -15,7 +15,9 @@ export default class EmojiShortcodesPlugin extends Plugin {
 	  ): boolean => {
 		if(Platform.isDesktop && this.settings.suggester) {
 			return this.autosuggest?.update(cmEditor, changeObj);
-		} else return false;
+		} else {
+			return false;
+		}
 	  };
 
 	async onload() {

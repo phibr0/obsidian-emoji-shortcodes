@@ -14,9 +14,13 @@ export default class EmojiSuggest extends CodeMirrorSuggest<string> {
 
   getSuggestions(inputStr: string): string[] {
     const suggestions = this.getEmojiSuggestions(inputStr);
-    if (inputStr && suggestions.length) {
+    if (inputStr.trim() && suggestions.length) {
       return suggestions;
     } else {
+      if(inputStr === " ") {
+        this.close();
+        return;
+      }
       return [];
     }
   }
@@ -33,7 +37,7 @@ export default class EmojiSuggest extends CodeMirrorSuggest<string> {
 
   selectSuggestion(
     suggestion: keyof typeof emoji,
-    event: KeyboardEvent | MouseEvent
+    _: KeyboardEvent | MouseEvent
   ): void {
     const cursorPos = this.cmEditor.getCursor();
     const line = cursorPos.line;

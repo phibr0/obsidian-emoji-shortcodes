@@ -57,6 +57,7 @@ export default abstract class CodeMirrorSuggest<T> implements ISuggestOwner<T> {
     this.suggest = new Suggest(this, suggestion, this.scope);
 
     this.scope.register([], "Escape", this.close.bind(this));
+    this.scope.register([], " ", this.close.bind(this));
   }
 
   public update(
