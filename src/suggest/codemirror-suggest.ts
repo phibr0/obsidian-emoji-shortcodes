@@ -58,6 +58,7 @@ export default abstract class CodeMirrorSuggest<T> implements ISuggestOwner<T> {
 
     this.scope.register([], "Escape", this.close.bind(this));
     this.scope.register([], " ", this.close.bind(this));
+    addEventListener("ES-replaced", this.close.bind(this));
   }
 
   public update(

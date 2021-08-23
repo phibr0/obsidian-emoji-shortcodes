@@ -11,6 +11,7 @@ export default function immediateReplace(editor: CodeMirror.Editor, settings: Em
                 const match = lineText.match(/:[^ \n]*:$/gm)?.first() as (keyof typeof emoji);
 
                 if (match && emoji[match]) {
+                    dispatchEvent(new Event("ES-replaced"));
                     editor.replaceRange(emoji[match], { line: lineNr, ch: lineText.length - match.length }, editor.getCursor());
                 }
             }
