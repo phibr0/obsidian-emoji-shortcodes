@@ -46,7 +46,6 @@ export default class EmojiShortcodesPlugin extends Plugin {
 			}
 			cm.on("change", this.autosuggestHandler);
 		});
-
 	}
 
 	onunload() {

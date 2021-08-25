@@ -5,11 +5,11 @@ export const wrapAround = (value: number, size: number): number => {
 };
 
 export default class Suggest<T> {
-  private owner: ISuggestOwner<T>;
-  private values: T[];
-  private suggestions: HTMLDivElement[];
-  private selectedItem: number;
-  private containerEl: HTMLElement;
+  owner: ISuggestOwner<T>;
+  values: T[];
+  suggestions: HTMLDivElement[];
+  selectedItem: number;
+  containerEl: HTMLElement;
 
   constructor(owner: ISuggestOwner<T>, containerEl: HTMLElement, scope: Scope) {
     this.owner = owner;

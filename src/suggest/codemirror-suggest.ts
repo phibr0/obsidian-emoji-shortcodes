@@ -53,12 +53,14 @@ export default abstract class CodeMirrorSuggest<T> implements ISuggestOwner<T> {
     this.scope = new Scope();
 
     this.suggestEl = createDiv("suggestion-container");
-    const suggestion = this.suggestEl.createDiv({cls: "suggestion"});
+    const suggestion = this.suggestEl.createDiv({ cls: "suggestion" });
     this.suggest = new Suggest(this, suggestion, this.scope);
 
     this.scope.register([], "Escape", this.close.bind(this));
     this.scope.register([], " ", this.close.bind(this));
-    addEventListener("ES-replaced", this.close.bind(this));
+    addEventListener("ES-replaced", () => {
+      this.close();
+    });
   }
 
   public update(
@@ -73,7 +75,7 @@ export default abstract class CodeMirrorSuggest<T> implements ISuggestOwner<T> {
 
     // autosuggest is open
     if (this.suggestEl.parentNode) {
-      if (isCursorBeforePos(this.startPos, cursorPos)) {
+      if (isCursorBeforePos(this.startPos, cursorPos) || cmEditor.getLine(cursorPos.line).substring(0, cursorPos.ch).endsWith("::")) {
         this.close();
         return false;
       }
