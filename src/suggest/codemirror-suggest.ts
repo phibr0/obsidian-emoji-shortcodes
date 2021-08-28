@@ -2,6 +2,14 @@ import { App, ISuggestOwner, Scope } from "obsidian";
 
 import Suggest from "./suggest";
 
+function checkForInputBlock(
+  cmEditor: CodeMirror.Editor,
+  cursorPos: CodeMirror.Position,
+): boolean {
+  const tokenType = cmEditor.getTokenAt(cursorPos, true).type;
+  return (typeof(tokenType) !== "string") || (tokenType.indexOf("code") === -1 && tokenType.indexOf("math") === -1); // "code" matches "inline-code" or "codeblock"
+}
+
 function checkForInputPhrase(
   cmEditor: CodeMirror.Editor,
   pos: CodeMirror.Position,
@@ -84,6 +92,7 @@ export default abstract class CodeMirrorSuggest<T> implements ISuggestOwner<T> {
       if (
         changeObj.text.length === 1 && // ignore multi-cursors
         checkForInputPhrase(this.cmEditor, cursorPos, this.triggerPhrase) &&
+        checkForInputBlock(this.cmEditor, cursorPos) &&
         !document.querySelector(".suggestion-container") // don't trigger multiple autosuggests
       ) {
         this.startPos = cursorPos;
