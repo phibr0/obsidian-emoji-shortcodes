@@ -24,6 +24,9 @@ export default class EmojiShortcodesPlugin extends Plugin {
 		if (this.settings.immediateReplace) {
 			const cursorPos = cm.getCursor();
 			const lineNr = cursorPos.line;
+			if (checkForInputBlock(cm, cursorPos) === false) {
+				return false;
+			}
 			const lineText = cm.getLine(lineNr).substring(0, cursorPos.ch);
 			const match = lineText.match(/:\w+?:$/gm)?.first() as (keyof typeof emoji);
 
