@@ -3,6 +3,7 @@ import { emoji } from './emojiList';
 import EmojiMarkdownPostProcessor from './markdownPostProcessor';
 import { DEFAULT_SETTINGS, EmojiPluginSettings, EmojiPluginSettingTab } from './settings';
 import EmojiSuggest from './suggest/emoji-suggest';
+import { checkForInputBlock } from './util';
 
 export default class EmojiShortcodesPlugin extends Plugin {
 

@@ -7,12 +7,12 @@ export default class EmojiMarkdownPostProcessor {
 		el.innerText.match(/[:][^\s:][^ \n:]*[:]/g)?.forEach((e: keyof typeof emoji) => EmojiMarkdownPostProcessor.emojiReplace(e, el)); 
 	}
 
-	static emojiReplace(shortcode: keyof typeof emoji, el: HTMLElement | ChildNode){
-		if ((typeof(el.tagName)==="string") && (el.tagName.indexOf("CODE") !== -1 || el.tagName.indexOf("MJX") !== -1)) {
+	static emojiReplace(shortcode: keyof typeof emoji, el: HTMLElement){
+		if ((typeof el.tagName ==="string") && (el.tagName.indexOf("CODE") !== -1 || el.tagName.indexOf("MJX") !== -1)) {
 			return false;
 		}
 		if (el.hasChildNodes()){
-			el.childNodes.forEach((child: ChildNode) => this.emojiReplace(shortcode, child));
+			el.childNodes.forEach((child: ChildNode) => this.emojiReplace(shortcode, child as HTMLElement));
 		} else {
 			el.textContent = el.textContent.replace(shortcode, emoji[shortcode] ?? shortcode);
 		}

@@ -77,11 +77,12 @@ export default class Suggest<T> {
     this.setSelectedItem(0, false);
   }
 
-  useSelectedItem(event: MouseEvent | KeyboardEvent): void {
+  useSelectedItem(event: MouseEvent | KeyboardEvent): void | boolean {
     const currentValue = this.values[this.selectedItem];
     if (currentValue) {
       this.owner.selectSuggestion(currentValue, event);
     } else {
+      //@ts-ignore
       this.owner.close();
       return true;
     }

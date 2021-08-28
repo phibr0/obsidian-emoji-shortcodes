@@ -1,14 +1,7 @@
 import { App, ISuggestOwner, Scope } from "obsidian";
+import { checkForInputBlock } from "src/util";
 
 import Suggest from "./suggest";
-
-function checkForInputBlock(
-  cmEditor: CodeMirror.Editor,
-  cursorPos: CodeMirror.Position,
-): boolean {
-  const tokenType = cmEditor.getTokenAt(cursorPos, true).type;
-  return (typeof(tokenType) !== "string") || (tokenType.indexOf("code") === -1 && tokenType.indexOf("math") === -1); // "code" matches "inline-code" or "codeblock"
-}
 
 function checkForInputPhrase(
   cmEditor: CodeMirror.Editor,
