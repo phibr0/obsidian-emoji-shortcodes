@@ -22,13 +22,14 @@ export default class EmojiShortcodesPlugin extends Plugin {
 
 	replaceHandler = (cm: CodeMirror.Editor) => {
 		if (this.settings.immediateReplace) {
-			const lineNr = cm.getCursor().line
-			const lineText = cm.getLine(lineNr);
-			const match = lineText.match(/:[^ \n]*:$/gm)?.first() as (keyof typeof emoji);
+			const cursorPos = cm.getCursor();
+			const lineNr = cursorPos.line;
+			const lineText = cm.getLine(lineNr).substring(0, cursorPos.ch);
+			const match = lineText.match(/:\w+?:$/gm)?.first() as (keyof typeof emoji);
 
 			if (match && emoji[match]) {
 				dispatchEvent(new Event("ES-replaced"));
-				cm.replaceRange(emoji[match], { line: lineNr, ch: lineText.length - match.length }, cm.getCursor());
+				cm.replaceRange(emoji[match], { line: lineNr, ch: lineText.length - match.length }, cursorPos);
 			}
 		}
 	}
