@@ -23,7 +23,7 @@ function checkForInputPhrase(
     },
     from
   );
-  return !precedingChar || /[^`a-zA-Z0-9]/.test(precedingChar);
+  return !precedingChar; // || /[^`a-zA-Z0-9]/.test(precedingChar);
 }
 
 function isCursorBeforePos(
