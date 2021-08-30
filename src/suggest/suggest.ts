@@ -42,8 +42,7 @@ export default class Suggest<T> {
 
     const selectItem = (event: KeyboardEvent) => {
       if (!event.isComposing) {
-        this.useSelectedItem(event);
-        return false;
+        return this.useSelectedItem(event);
       }
     };
     scope.register([], "Enter", selectItem);
@@ -78,10 +77,15 @@ export default class Suggest<T> {
     this.setSelectedItem(0, false);
   }
 
-  useSelectedItem(event: MouseEvent | KeyboardEvent): void {
+  useSelectedItem(event: MouseEvent | KeyboardEvent): void | boolean {
     const currentValue = this.values[this.selectedItem];
     if (currentValue) {
       this.owner.selectSuggestion(currentValue, event);
+      return false;
+    } else {
+      //@ts-ignore
+      this.owner.close();
+      return true;
     }
   }
 

@@ -41,7 +41,7 @@ export default class EmojiSuggest extends CodeMirrorSuggest<string> {
   ): void {
     const cursorPos = this.cmEditor.getCursor();
     const line = cursorPos.line;
-    const start = this.cmEditor.getLine(line).lastIndexOf(":");
+    const start = this.cmEditor.getLine(line).substring(0, cursorPos.ch).lastIndexOf(":");
     this.cmEditor.replaceRange(this.plugin.settings.immediateReplace ? emoji[suggestion] : suggestion, { ch: start, line: line }, cursorPos);
 
     this.close();

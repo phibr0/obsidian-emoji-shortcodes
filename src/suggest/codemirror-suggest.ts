@@ -1,4 +1,5 @@
 import { App, ISuggestOwner, Scope } from "obsidian";
+import { checkForInputBlock } from "src/util";
 
 import Suggest from "./suggest";
 
@@ -23,7 +24,7 @@ function checkForInputPhrase(
     },
     from
   );
-  return !precedingChar || /[^`a-zA-Z0-9]/.test(precedingChar);
+  return !precedingChar; // || /[^`a-zA-Z0-9]/.test(precedingChar);
 }
 
 function isCursorBeforePos(
@@ -84,6 +85,7 @@ export default abstract class CodeMirrorSuggest<T> implements ISuggestOwner<T> {
       if (
         changeObj.text.length === 1 && // ignore multi-cursors
         checkForInputPhrase(this.cmEditor, cursorPos, this.triggerPhrase) &&
+        checkForInputBlock(this.cmEditor, cursorPos) &&
         !document.querySelector(".suggestion-container") // don't trigger multiple autosuggests
       ) {
         this.startPos = cursorPos;
