@@ -13,18 +13,9 @@ function checkForInputPhrase(
     ch: pos.ch - phrase.length,
   };
 
-  if (cmEditor.getRange(from, pos) !== phrase) {
-    return false;
+  if (cmEditor.getRange(from, pos) === phrase) {
+    return true;
   }
-
-  const precedingChar = cmEditor.getRange(
-    {
-      line: pos.line,
-      ch: from.ch - 1,
-    },
-    from
-  );
-  return !precedingChar; // || /[^`a-zA-Z0-9]/.test(precedingChar);
 }
 
 function isCursorBeforePos(
