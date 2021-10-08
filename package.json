@@ -4,7 +4,7 @@
   "description": "This is a sample plugin for Obsidian (https://obsidian.md)",
   "main": "main.js",
   "scripts": {
-    "dev": "esbuild src/main.ts --bundle --external:obsidian --format=cjs --outfile=main.js --watch",
+    "dev": "esbuild src/main.ts --bundle --external:obsidian --format=cjs --outfile=main.js --minify --watch",
     "build": "rollup --config rollup.config.js --environment BUILD:production"
   },
   "keywords": [],

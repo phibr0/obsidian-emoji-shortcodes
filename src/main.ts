@@ -1,63 +1,21 @@
-import { Platform, Plugin } from 'obsidian';
+import { Platform, Plugin, EditorSuggest, Editor, EditorPosition, TFile, EditorSuggestTriggerInfo, EditorSuggestContext } from 'obsidian';
+import DefinitionListPostProcessor from './definitionListPostProcessor';
 import { emoji } from './emojiList';
-import EmojiMarkdownPostProcessor from './markdownPostProcessor';
+import EmojiMarkdownPostProcessor from './emojiPostProcessor';
 import { DEFAULT_SETTINGS, EmojiPluginSettings, EmojiPluginSettingTab } from './settings';
-import EmojiSuggest from './suggest/emoji-suggest';
 import { checkForInputBlock } from './util';
 
 export default class EmojiShortcodesPlugin extends Plugin {
 
 	settings: EmojiPluginSettings;
-	autosuggest: EmojiSuggest;
-
-	autosuggestHandler = (
-		cmEditor: CodeMirror.Editor,
-		changeObj: CodeMirror.EditorChange
-	): boolean => {
-		if (Platform.isDesktop && this.settings.suggester) {
-			return this.autosuggest?.update(cmEditor, changeObj);
-		} else {
-			return false;
-		}
-	};
-
-	replaceHandler = (cm: CodeMirror.Editor) => {
-		if (this.settings.immediateReplace) {
-			const cursorPos = cm.getCursor();
-			const lineNr = cursorPos.line;
-			if (checkForInputBlock(cm, cursorPos) === false) {
-				return false;
-			}
-			const lineText = cm.getLine(lineNr).substring(0, cursorPos.ch);
-			const match = lineText.match(/:\w+?:$/gm)?.first() as (keyof typeof emoji);
-
-			if (match && emoji[match]) {
-				dispatchEvent(new Event("ES-replaced"));
-				cm.replaceRange(emoji[match], { line: lineNr, ch: lineText.length - match.length }, cursorPos);
-			}
-		}
-	}
 
 	async onload() {
 		await this.loadSettings();
 		this.addSettingTab(new EmojiPluginSettingTab(this.app, this));
-
-		this.autosuggest = new EmojiSuggest(this.app, this);
+		this.registerEditorSuggest(new EmojiSuggester(this));
 
 		this.registerMarkdownPostProcessor(EmojiMarkdownPostProcessor.emojiProcessor);
-		this.registerCodeMirror((cm: CodeMirror.Editor) => {
-			if (Platform.isDesktop) {
-				cm.on("cursorActivity", this.replaceHandler);
-			}
-			cm.on("change", this.autosuggestHandler);
-		});
-	}
-
-	onunload() {
-		this.app.workspace.iterateCodeMirrors((cm: CodeMirror.Editor) => {
-			cm.off("change", this.autosuggestHandler);
-			cm.off("cursorActivity", this.replaceHandler);
-		});
+		//this.registerMarkdownPostProcessor(DefinitionListPostProcessor.definitionListProcessor);
 	}
 
 	async loadSettings() {
@@ -66,5 +24,49 @@ export default class EmojiShortcodesPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+	}
+}
+
+class EmojiSuggester extends EditorSuggest<string> {
+	plugin: EmojiShortcodesPlugin;
+
+	constructor(plugin: EmojiShortcodesPlugin) {
+		super(plugin.app);
+		this.plugin = plugin;
+	}
+
+	onTrigger(cursor: EditorPosition, editor: Editor, _: TFile): EditorSuggestTriggerInfo | null {
+		if (this.plugin.settings.suggester) {
+			const sub = editor.getLine(cursor.line).substring(0, cursor.ch);
+			const match = sub.match(/:\S+$/)?.first();
+			if (match) {
+				return {
+					end: cursor,
+					start: {
+						ch: sub.lastIndexOf(match),
+						line: cursor.line,
+					},
+					query: match,
+				}
+			}
+		}
+		return null;
+	}
+
+	getSuggestions(context: EditorSuggestContext): string[] {
+		return Object.keys(emoji).filter(p => p.startsWith(context.query));
+	}
+
+	renderSuggestion(suggestion: string, el: HTMLElement): void {
+		const outer = el.createDiv({ cls: "ES-suggester-container" });
+		outer.createDiv({ cls: "ES-shortcode" }).setText(suggestion.replace(/:/g, ""));
+		//@ts-expect-error
+		outer.createDiv({ cls: "ES-emoji" }).setText(emoji[suggestion]);
+	}
+
+	selectSuggestion(suggestion: string): void {
+		if(this.context) {
+			(this.context.editor as Editor).replaceRange(this.plugin.settings.immediateReplace ? emoji[suggestion] : `${suggestion} `, this.context.start, this.context.end);
+		}
 	}
 }
