@@ -54,7 +54,8 @@ class EmojiSuggester extends EditorSuggest<string> {
 	}
 
 	getSuggestions(context: EditorSuggestContext): string[] {
-		return Object.keys(emoji).filter(p => p.startsWith(context.query));
+		let emoji_query = context.query.replace(':', '');
+		return Object.keys(emoji).filter(p => p.includes(emoji_query));
 	}
 
 	renderSuggestion(suggestion: string, el: HTMLElement): void {
