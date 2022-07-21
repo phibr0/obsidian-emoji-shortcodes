@@ -1,6 +1,6 @@
 // Generated from: https://api.github.com/emojis
 
-export const emoji = {
+export const emoji = JSON.parse(`{
   ":100:": "💯",
   ":1234:": "🔢",
   ":+1:": "👍",
@@ -1856,4 +1856,4 @@ export const emoji = {
   ":zombie_man:": "🧟‍♂",
   ":zombie_woman:": "🧟‍♀",
   ":zzz:": "💤"
-}
+}`);
