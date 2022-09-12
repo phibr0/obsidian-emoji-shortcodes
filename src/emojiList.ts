@@ -744,7 +744,7 @@ export const emoji = JSON.parse(`{
   ":health_worker:": "🧑‍⚕",
   ":hear_no_evil:": "🙉",
   ":heard_mcdonald_islands:": "🇭‍🇲",
-  ":heart:": "❤",
+  ":heart:": "❤️",
   ":heart_decoration:": "💟",
   ":heart_eyes:": "😍",
   ":heart_eyes_cat:": "😻",
