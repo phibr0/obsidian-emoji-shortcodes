@@ -4,12 +4,15 @@ import EmojiShortcodesPlugin from "./main";
 export interface EmojiPluginSettings {
 	immediateReplace: boolean;
 	suggester: boolean;
+	historyLimit: number;
 	history: string[];
 }
 
 export const DEFAULT_SETTINGS: EmojiPluginSettings = {
 	immediateReplace: true,
 	suggester: true,
+	historyLimit: 100,
+	history: [],
 }
 
 export class EmojiPluginSettingTab extends PluginSettingTab {
@@ -45,6 +48,18 @@ export class EmojiPluginSettingTab extends PluginSettingTab {
 				cb.setValue(this.plugin.settings.suggester)
 					.onChange(async value => {
 						this.plugin.settings.suggester = value;
+						await this.plugin.saveSettings();
+					})
+			});
+
+		new Setting(containerEl)
+			.setName('History Limit')
+			.setDesc('Number of histories for suggestion item priority.')
+			.addText(cb => {
+				cb.setPlaceholder(String(DEFAULT_SETTINGS.historyLimit));
+				cb.setValue(String(this.plugin.settings.historyLimit))
+					.onChange(async value => {
+						this.plugin.settings.historyLimit = value !== '' ? Number(value) : 0;
 						await this.plugin.saveSettings();
 					})
 			});
