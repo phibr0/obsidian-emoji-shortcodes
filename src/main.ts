@@ -8,6 +8,7 @@ import { checkForInputBlock } from './util';
 export default class EmojiShortcodesPlugin extends Plugin {
 
 	settings: EmojiPluginSettings;
+	emojiList: string[] = Object.keys(emoji);
 
 	async onload() {
 		await this.loadSettings();
@@ -24,6 +25,15 @@ export default class EmojiShortcodesPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+	}
+
+	updateHistory(suggestion: string) {
+		const set = new Set([suggestion, ...this.settings.history]);
+		const history = [...set];
+		this.emojiList = [...history, ...this.emojiList.filter(e => !set.has(e))];
+
+		this.settings = Object.assign(this.settings, { history });
+		this.saveSettings();
 	}
 }
 
@@ -55,7 +65,7 @@ class EmojiSuggester extends EditorSuggest<string> {
 
 	getSuggestions(context: EditorSuggestContext): string[] {
 		let emoji_query = context.query.replace(':', '').toLowerCase();
-		return Object.keys(emoji).filter(p => p.includes(emoji_query));
+		return this.plugin.emojiList.filter(p => p.includes(emoji_query));
 	}
 
 	renderSuggestion(suggestion: string, el: HTMLElement): void {
@@ -68,6 +78,7 @@ class EmojiSuggester extends EditorSuggest<string> {
 	selectSuggestion(suggestion: string): void {
 		if(this.context) {
 			(this.context.editor as Editor).replaceRange(this.plugin.settings.immediateReplace ? emoji[suggestion] : `${suggestion} `, this.context.start, this.context.end);
+			this.plugin.updateHistory(suggestion);
 		}
 	}
 }

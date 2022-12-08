@@ -4,6 +4,7 @@ import EmojiShortcodesPlugin from "./main";
 export interface EmojiPluginSettings {
 	immediateReplace: boolean;
 	suggester: boolean;
+	history: string[];
 }
 
 export const DEFAULT_SETTINGS: EmojiPluginSettings = {
