@@ -4,6 +4,7 @@ import EmojiShortcodesPlugin from "./main";
 export interface EmojiPluginSettings {
 	immediateReplace: boolean;
 	suggester: boolean;
+	historyPriority: boolean;
 	historyLimit: number;
 	history: string[];
 }
@@ -11,6 +12,7 @@ export interface EmojiPluginSettings {
 export const DEFAULT_SETTINGS: EmojiPluginSettings = {
 	immediateReplace: true,
 	suggester: true,
+	historyPriority: true,
 	historyLimit: 100,
 	history: [],
 }
@@ -53,16 +55,41 @@ export class EmojiPluginSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(containerEl)
-			.setName('History Limit')
-			.setDesc('Number of histories for suggestion item priority.')
-			.addText(cb => {
-				cb.setPlaceholder(String(DEFAULT_SETTINGS.historyLimit));
-				cb.setValue(String(this.plugin.settings.historyLimit))
+			.setName('Use History Priority')
+			.setDesc('Suggester gives priority to recently used emoji.')
+			.addToggle(cb => {
+				cb.setValue(this.plugin.settings.historyPriority)
 					.onChange(async value => {
-						this.plugin.settings.historyLimit = value !== '' ? Number(value) : 0;
+						this.plugin.settings.historyPriority = value;
 						await this.plugin.saveSettings();
+						this.display();
 					})
 			});
+
+		if (this.plugin.settings.historyPriority) {
+			new Setting(containerEl)
+				.setName('History Limit')
+				.setClass('ES-sub-setting')
+				.addText(cb => {
+					cb.setPlaceholder(String(DEFAULT_SETTINGS.historyLimit))
+						.setValue(String(this.plugin.settings.historyLimit))
+						.onChange(async value => {
+							this.plugin.settings.historyLimit = value !== '' ? Number(value) : 0;
+							await this.plugin.saveSettings();
+						})
+				});
+
+			new Setting(containerEl)
+				.setName('Clear History')
+				.setClass('ES-sub-setting')
+				.addButton(cb => {
+					cb.setButtonText("Clear")
+						.onClick(async () => {
+							this.plugin.settings.history = [];
+							await this.plugin.saveSettings();
+						})
+				});
+		}
 
 		new Setting(containerEl)
 			.setName('Donate')

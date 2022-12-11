@@ -28,6 +28,8 @@ export default class EmojiShortcodesPlugin extends Plugin {
 	}
 
 	updateHistory(suggestion: string) {
+		if (!this.settings.historyPriority) return;
+
 		const set = new Set([suggestion, ...this.settings.history]);
 		const history = [...set].slice(0, this.settings.historyLimit);
 		this.emojiList = [...history, ...this.emojiList.filter(e => !set.has(e))];
