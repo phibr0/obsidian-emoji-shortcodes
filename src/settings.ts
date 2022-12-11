@@ -74,7 +74,7 @@ export class EmojiPluginSettingTab extends PluginSettingTab {
 					cb.setPlaceholder(String(DEFAULT_SETTINGS.historyLimit))
 						.setValue(String(this.plugin.settings.historyLimit))
 						.onChange(async value => {
-							this.plugin.settings.historyLimit = value !== '' ? Number(value) : 0;
+							this.plugin.settings.historyLimit = value !== '' ? Number(value) : DEFAULT_SETTINGS.historyLimit;
 							await this.plugin.saveSettings();
 						})
 				});
