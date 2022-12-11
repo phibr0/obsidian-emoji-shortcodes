@@ -8,7 +8,7 @@ import { checkForInputBlock } from './util';
 export default class EmojiShortcodesPlugin extends Plugin {
 
 	settings: EmojiPluginSettings;
-	emojiList: string[] = Object.keys(emoji);
+	emojiList: string[];
 
 	async onload() {
 		await this.loadSettings();
@@ -21,10 +21,17 @@ export default class EmojiShortcodesPlugin extends Plugin {
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.updateEmojiList()
 	}
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+		this.updateEmojiList()
+	}
+
+	updateEmojiList() {
+		const set = new Set(this.settings.history)
+		this.emojiList = [...this.settings.history, ...Object.keys(emoji).filter(e => !set.has(e))];
 	}
 
 	updateHistory(suggestion: string) {
@@ -32,7 +39,6 @@ export default class EmojiShortcodesPlugin extends Plugin {
 
 		const set = new Set([suggestion, ...this.settings.history]);
 		const history = [...set].slice(0, this.settings.historyLimit);
-		this.emojiList = [...history, ...this.emojiList.filter(e => !set.has(e))];
 
 		this.settings = Object.assign(this.settings, { history });
 		this.saveSettings();
