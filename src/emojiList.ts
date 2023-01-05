@@ -542,6 +542,7 @@ export const emoji = JSON.parse(`{
   ":eyes:": "👀",
   ":face_exhaling:": "😮‍💨",
   ":face_in_clouds:": "😶‍🌫",
+  ":face_with_diagonal_mouth:": "🫤",
   ":face_with_head_bandage:": "🤕",
   ":face_with_spiral_eyes:": "😵‍💫",
   ":face_with_thermometer:": "🤒",
